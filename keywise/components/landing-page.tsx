@@ -4,9 +4,53 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChevronDown, Home, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { HowItWorksTimeline } from './ui/HowItWorksTimeline';
 
 export function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFaqId, setOpenFaqId] = useState<number | null>(null);
+  const [prompt, setPrompt] = useState(
+    "Create a polished real estate listing for a charming 4-bedroom Tudor Revival home with updated kitchen, mature landscaping, and spacious family spaces."
+  );
+  const [listingGenerated, setListingGenerated] = useState(false);
+  const [activeOutputTab, setActiveOutputTab] = useState<
+    'description' | 'social' | 'openHouse'
+  >('description');
+
+  const outputContent = {
+    description:
+      'This beautifully maintained 4-bedroom Tudor Revival home blends classic craftsmanship with modern comfort. Updated systems, a remodeled kitchen, and mature landscaping create an inviting retreat for today\'s buyer. Spacious living areas and elegant details make this property ideal for families who want effortless style and move-in readiness.',
+    social:
+      'Sell your home with confidence: polished listing copy for a charming 4-bed Tudor Revival with an updated kitchen, lush landscaping, and room for family memories. Ready to use in social posts, email campaigns, and online listings.',
+    openHouse:
+      'Open house preview: Explore this beautiful Tudor Revival with timeless character, modern updates, and a welcoming yard. Perfect for buyers seeking charm, quality, and a family-friendly layout.',
+  };
+
+  const handleGenerateListing = () => {
+    setListingGenerated(true);
+    setActiveOutputTab('description');
+  };
+
+  const faqItems = [
+    {
+      id: 1,
+      question: 'Is KeyWise a real estate agent?',
+      answer:
+        'No. KeyWise is a marketing and education tool for homeowners. We help you create professional materials and understand the selling process. For legal or financial decisions, you should consult licensed professionals.',
+    },
+    {
+      id: 2,
+      question: 'Does KeyWise provide legal or financial advice?',
+      answer:
+        'No. KeyWise is designed to help with content creation and learning about the home selling process. For legal, tax, or financial guidance, please consult appropriate professionals.',
+    },
+    {
+      id: 3,
+      question: 'Can I edit and customize the content?',
+      answer:
+        'Absolutely. Everything KeyWise generates is a starting point. You have full control to edit, refine, and customize all content to match your home and preferences perfectly.',
+    },
+  ];
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -115,7 +159,7 @@ export function LandingPage() {
 
               <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
                 <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">
-                  Get Started Free
+                  Get Started
                 </Button>
                 <Button
                   variant="outline"
@@ -183,102 +227,7 @@ export function LandingPage() {
         </section>
 
         {/* ========== HOW IT WORKS SECTION ========== */}
-        <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8 kw-bg">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-bold kw-text">
-                How It Works
-              </h2>
-            </div>
-
-            {/* Three Steps */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
-              {/* Step 1 */}
-              <div className="relative">
-                <Card className="p-8 rounded-xl border kw-border kw-card h-full">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full kw-primary text-white flex items-center justify-center font-bold text-lg">
-                      1
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold kw-text mb-4">
-                    Upload Your Home
-                  </h3>
-                  <ul className="space-y-2 kw-muted text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="kw-muted-2 mt-0.5">•</span>
-                      <span>Photos</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Square footage</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Bedrooms &amp; bathrooms</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Property details</span>
-                    </li>
-                  </ul>
-                </Card>
-              </div>
-
-              {/* Step 2 */}
-              <div className="relative">
-                <Card className="p-8 rounded-xl border kw-border kw-card h-full">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full kw-primary text-white flex items-center justify-center font-bold text-lg">
-                      2
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold kw-text mb-4">
-                    AI Analyzes Your Property
-                  </h3>
-                  <ul className="space-y-2 kw-muted text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="kw-muted-2 mt-0.5">•</span>
-                      <span>Generate descriptions</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Marketing content</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Staging recommendations</span>
-                    </li>
-                  </ul>
-                </Card>
-              </div>
-
-              {/* Step 3 */}
-              <div>
-                <Card className="p-8 rounded-xl border kw-border kw-card h-full">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full kw-primary text-white flex items-center justify-center font-bold text-lg">
-                      3
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold kw-text mb-4">
-                    Review &amp; Publish
-                  </h3>
-                  <ul className="space-y-2 kw-muted text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="kw-muted-2 mt-0.5">•</span>
-                      <span>Edit everything</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-gray-400 mt-0.5">•</span>
-                      <span>Stay in control</span>
-                    </li>
-                  </ul>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HowItWorksTimeline/>
 
         {/* ========== FEATURES SECTION ========== */}
         <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 kw-bg">
@@ -350,52 +299,139 @@ export function LandingPage() {
               <h2 className="text-4xl sm:text-5xl font-bold kw-text">
                 See It In Action
               </h2>
+              <p className="mt-4 max-w-2xl mx-auto text-lg kw-muted">
+                Enter a real seller-style prompt and watch KeyWise transform it
+                into polished listing copy instantly.
+              </p>
             </div>
 
-            {/* Example card moved from hero */}
-            <Card className="p-8 md:p-12 rounded-2xl border kw-border kw-card">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+              {/* Left: Prompt */}
               <div className="space-y-6">
-                {/* Example Property */}
-                <div>
+                <div className="rounded-3xl border kw-border kw-card p-6 shadow-sm">
                   <p className="text-xs font-semibold kw-muted-2 uppercase tracking-wide mb-4">
-                    Example
+                    What you might type
                   </p>
-                  <h3 className="text-2xl font-semibold kw-text mb-4 leading-tight">
-                    Charming Tudor Revival in a Tree-Lined Neighborhood
-                  </h3>
-                  <p className="kw-muted leading-relaxed mb-4">
-                    This beautifully maintained 4-bedroom home features classic
-                    architectural details, recently updated systems, and mature
-                    landscaping. The open kitchen flows naturally into the
-                    living spaces, making it ideal for modern family living.
-                  </p>
-                  <p className="text-sm kw-muted">
-                    Perfect for buyers seeking character and quality in an
-                    established community.
-                  </p>
+                  <textarea
+                    value={prompt}
+                    onChange={(event) => setPrompt(event.target.value)}
+                    rows={8}
+                    className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-4 text-sm text-gray-900 shadow-sm focus:border-kw-primary focus:outline-none focus:ring-2 focus:ring-kw-primary/20"
+                  />
                 </div>
 
-                {/* Property Details */}
-                <div className="border-t kw-border pt-6">
-                  <p className="text-xs font-semibold kw-muted-2 uppercase tracking-wide mb-4">
-                    Generated for
-                  </p>
-                  <div className="flex items-center justify-between text-sm">
+                <Button
+                  onClick={handleGenerateListing}
+                  className="kw-primary w-full text-base py-4 font-semibold"
+                >
+                  Generate Listing
+                </Button>
+              </div>
+
+              {/* Right: Output */}
+              <div>
+                <Card className="rounded-3xl border kw-border kw-card p-6 shadow-sm min-h-[320px]">
+                  {/* Header */}
+                  <div className="flex items-center justify-between gap-4 mb-6">
                     <div>
-                      <p className="kw-text font-semibold">
-                        4 Beds • 3 Baths • 2,600 Sq Ft
+                      <p className="text-xs font-semibold kw-muted-2 uppercase tracking-wide">
+                        What KeyWise generates
                       </p>
-                      <p className="kw-muted-2 text-xs mt-1">
-                        Created in seconds
-                      </p>
+                      <h3 className="text-xl font-semibold kw-text mt-2">
+                        Live demo output
+                      </h3>
                     </div>
-                    <span className="kw-primary-text font-semibold">
-                      Ready to use
+                    <span className="rounded-full border border-kw-border bg-slate-50 px-3 py-1 text-xs font-semibold text-gray-700">
+                      4 Beds • 3 Baths • 2,600 Sq Ft
                     </span>
                   </div>
-                </div>
+
+                  {/* Tabs – ALWAYS visible */}
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {['description', 'social', 'openHouse'].map((tab) => {
+                      const label =
+                        tab === 'description'
+                          ? 'Listing description'
+                          : tab === 'social'
+                          ? 'Social post'
+                          : 'Open house blurb';
+                      const isActive = activeOutputTab === tab;
+
+                      return (
+                        <button
+                          key={tab}
+                          type="button"
+                          onClick={() => setActiveOutputTab(tab as typeof activeOutputTab)}
+                          className={
+                            'rounded-full border px-4 py-2 text-sm font-medium transition-transform duration-200 ' +
+                            (isActive
+                              ? 'shadow-md scale-105'
+                              : 'border-gray-200 bg-white text-gray-800 hover:border-gray-300')
+                          }
+                          style={
+                            isActive
+                              ? {
+                                  backgroundColor: 'var(--primary)',
+                                  borderColor: 'var(--primary)',
+                                  color: '#ffffff',
+                                }
+                              : undefined
+                          }
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+
+                  {/* Content – swaps between placeholder and generated output */}
+                  {!listingGenerated ? (
+                    <div className="rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-500 transition">
+                      <p className="text-base font-medium">
+                        Click “Generate Listing” to see the listing output.
+                      </p>
+                      <p className="mt-3 text-sm">
+                        We’ll show the listing copy, social post, and open house
+                        blurb right here.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="transition duration-500 ease-out">
+                      <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-900">
+                              {activeOutputTab === "description"
+                                ? "Listing description"
+                                : activeOutputTab === "social"
+                                ? "Social post"
+                                : "Open house blurb"}
+                            </h4>
+                            <p className="mt-2 text-xs text-gray-500">
+                              {activeOutputTab === "description"
+                                ? "A polished listing description pulled from your prompt."
+                                : activeOutputTab === "social"
+                                ? "A short post you can use for social media."
+                                : "A quick open house teaser for interested buyers."}
+                            </p>
+                          </div>
+                          <span className="rounded-full bg-kw-primary px-3 py-1 text-xs font-semibold text-white">
+                            Selected
+                          </span>
+                        </div>
+                        <p className="mt-5 text-sm text-gray-700 leading-relaxed">
+                          {outputContent[activeOutputTab]}
+                        </p>
+                      </div>
+                      <div className="mt-2 border-t border-gray-200 pt-5 text-xs text-gray-500">
+                        Generated from your prompt in seconds.
+                      </div>
+                    </div>
+                  )}
+                </Card>
               </div>
-            </Card>
+            </div>
           </div>
         </section>
 
@@ -408,44 +444,35 @@ export function LandingPage() {
               </h2>
             </div>
 
-            {/* FAQ Items */}
-            <div className="space-y-6">
-              {/* FAQ 1 */}
-              <div className="p-8 rounded-xl border border-gray-200 bg-white hover:shadow-md transition">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">
-                  Is KeyWise a real estate agent?
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  No. KeyWise is a marketing and education tool for homeowners.
-                  We help you create professional materials and understand the
-                  selling process. For legal or financial decisions, you should
-                  consult licensed professionals.
-                </p>
-              </div>
+            <div className="space-y-4">
+              {faqItems.map((item) => {
+                const isOpen = openFaqId === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() =>
+                      setOpenFaqId((current) => (current === item.id ? null : item.id))
+                    }
+                    className="w-full text-left rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+                  >
+                    <div className="flex items-center justify-between p-6">
+                      <span className="text-base font-semibold text-gray-900">
+                        {item.question}
+                      </span>
+                      <span className="text-xl font-bold text-gray-500">
+                        {isOpen ? '−' : '+'}
+                      </span>
+                    </div>
 
-              {/* FAQ 2 */}
-              <div className="p-8 rounded-xl border border-gray-200 bg-white hover:shadow-md transition">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">
-                  Does KeyWise provide legal or financial advice?
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  No. KeyWise is designed to help with content creation and
-                  learning about the home selling process. For legal, tax, or
-                  financial guidance, please consult appropriate professionals.
-                </p>
-              </div>
-
-              {/* FAQ 3 */}
-              <div className="p-8 rounded-xl border border-gray-200 bg-white hover:shadow-md transition">
-                <h3 className="text-base font-semibold text-gray-900 mb-4">
-                  Can I edit and customize the content?
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Absolutely. Everything KeyWise generates is a starting point.
-                  You have full control to edit, refine, and customize all
-                  content to match your home and preferences perfectly.
-                </p>
-              </div>
+                    {isOpen && (
+                      <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                        {item.answer}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -460,7 +487,7 @@ export function LandingPage() {
               Generate professional real estate marketing materials in minutes.
             </p>
             <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">
-              Get Started Free
+              Get Started
             </Button>
           </div>
         </section>
