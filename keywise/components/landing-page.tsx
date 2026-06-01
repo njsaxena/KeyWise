@@ -88,12 +88,14 @@ export function LandingPage() {
                 onClick={() => scrollToSection('faq')}
                 className="text-sm transition kw-link"
               >
-                Pricing
+                FAQs
               </button>
-              <button className="text-sm transition kw-link">Sign In</button>
-              <Button className="kw-primary text-sm py-2 px-6">
-                Get Started
-              </Button>
+              <a href="/sign-in?redirect_url=/dashboard" className="text-sm transition kw-link">
+                Sign In
+              </a>
+              <a href="/sign-in?redirect_url=/dashboard">
+                <Button className="kw-primary text-sm py-2 px-6">Get Started</Button>
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -128,12 +130,14 @@ export function LandingPage() {
                 onClick={() => scrollToSection('faq')}
                 className="block w-full text-left py-2 text-sm kw-link"
               >
-                Pricing
+                FAQs
               </button>
-              <button className="block w-full text-left py-2 text-sm kw-link">
+              <a href="/sign-in?redirect_url=/dashboard" className="block w-full text-left py-2 text-sm kw-link">
                 Sign In
-              </button>
-              <Button className="w-full kw-primary">Get Started</Button>
+              </a>
+              <a href="/sign-in?redirect_url=/dashboard" className="w-full">
+                <Button className="w-full kw-primary">Get Started</Button>
+              </a>
             </div>
           )}
         </nav>
@@ -158,12 +162,13 @@ export function LandingPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">
-                  Get Started
-                </Button>
+                <a href="/sign-in?redirect_url=/dashboard">
+                  <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">Get Started</Button>
+                </a>
                 <Button
                   variant="outline"
                   className="px-8 py-3 text-base font-semibold kw-text border-2 kw-border hover:kw-border rounded-lg transition"
+                  onClick={() => scrollToSection('see-it-in-action')}
                 >
                   View Demo
                 </Button>
@@ -293,7 +298,7 @@ export function LandingPage() {
         </section>
 
         {/* ========== DEMO / EXAMPLE SECTION ========== */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 kw-bg">
+        <section id="see-it-in-action" className="py-20 px-4 sm:px-6 lg:px-8 kw-bg">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold kw-text">
@@ -486,9 +491,9 @@ export function LandingPage() {
             <p className="text-xl sm:text-2xl mb-10 kw-muted max-w-2xl mx-auto leading-relaxed">
               Generate professional real estate marketing materials in minutes.
             </p>
-            <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">
-              Get Started
-            </Button>
+            <a href="/sign-in?redirect_url=/dashboard">
+              <Button className="px-8 py-3 text-base font-semibold kw-primary rounded-lg transition">Get Started</Button>
+            </a>
           </div>
         </section>
         </main>
@@ -526,7 +531,7 @@ export function LandingPage() {
                     href="#"
                     className="text-gray-400 hover:text-white transition"
                   >
-                    Pricing
+                    FAQs
                   </a>
                 </li>
                 <li>

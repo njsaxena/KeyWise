@@ -36,7 +36,7 @@ export function HowItWorksTimeline() {
   };
 
   return (
-    <section className="py-16">
+    <section id="how-it-works" className="py-16">
       <div className="mx-auto max-w-5xl">
         <header className="mb-10 text-center">
           <h2 className="text-2xl md:text-3xl font-semibold kw-text mb-2">
