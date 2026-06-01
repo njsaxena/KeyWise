@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/types/listing";
 
-export default function ListingView({ params }: { params: any }) {
-  const { id } = React.use(params);
+export default function ListingView({ params }: { params: { id: string } }) {
+  const { id } = params;
   const [item, setItem] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
