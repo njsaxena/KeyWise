@@ -70,6 +70,58 @@ export async function POST(req: NextRequest) {
 
     const supabase = createServerSupabaseClient();
 
+    // ---- Rate limiting: max 50 assistant requests per user per day ----
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+    // Upsert usage row for today
+    const { data: usageRow, error: usageError } = await supabase
+      .from("assistant_usage")
+      .upsert(
+        { user_id: userId, date: today }, // insert if not exist
+        { onConflict: "user_id,date" },
+      )
+      .select("id, user_id, date, requests")
+      .single();
+
+    if (usageError || !usageRow) {
+      console.error("Error upserting assistant_usage:", usageError);
+      return NextResponse.json(
+        { error: "Failed to check usage limits" },
+        { status: 500 },
+      );
+    }
+
+    const MAX_REQUESTS_PER_DAY = 50;
+
+    if (usageRow.requests >= MAX_REQUESTS_PER_DAY) {
+      return NextResponse.json(
+        {
+          error:
+            "Daily KeyWise assistant limit reached. Please try again tomorrow or upgrade your plan.",
+        },
+        { status: 429 },
+      );
+    }
+
+    // Increment usage *before* calling OpenAI so abusive clients still get counted
+    const { error: incError } = await supabase
+      .from("assistant_usage")
+      .update({
+        requests: usageRow.requests + 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", usageRow.id);
+
+    if (incError) {
+      console.error("Error incrementing assistant_usage:", incError);
+      return NextResponse.json(
+        { error: "Failed to update usage limits" },
+        { status: 500 },
+      );
+    }
+    // ---- end rate limiting block ----
+
+
     // 1) Ensure conversation exists (create if none)
     let conversation: ConversationRow | null = null;
     let conversationId = body.conversationId || null;
