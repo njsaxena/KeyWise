@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/types/listing";
 
-export default function ListingView({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function ListingView() {
+  const params = useParams<{ id: string }>();
+  const id = params.id;
   const [item, setItem] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -14,6 +15,7 @@ export default function ListingView({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   useEffect(() => {
+    if (!id) return;
     fetch(`/api/listings/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -28,6 +30,7 @@ export default function ListingView({ params }: { params: { id: string } }) {
   }, [id]);
 
   const handleDelete = async () => {
+    if (!id) return;
     if (!window.confirm("Delete this listing? This action cannot be undone.")) {
       return;
     }
@@ -45,6 +48,7 @@ export default function ListingView({ params }: { params: { id: string } }) {
     setError(data?.error ?? "Unable to delete listing.");
   };
 
+  if (!id) return <div className="p-8">Invalid listing id</div>;
   if (loading) return <div className="p-8">Loading...</div>;
   if (error) return <div className="p-8 text-destructive">{error}</div>;
   if (!item) return <div className="p-8">Listing not found</div>;
