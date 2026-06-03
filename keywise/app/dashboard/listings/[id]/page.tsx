@@ -1,9 +1,11 @@
+// app/dashboard/listings/[id]/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/types/listing";
+import { ListingDescriptionPanel } from "@/components/listing-description-panel";
 
 export default function ListingView() {
   const params = useParams<{ id: string }>();
@@ -31,12 +33,18 @@ export default function ListingView() {
 
   const handleDelete = async () => {
     if (!id) return;
-    if (!window.confirm("Delete this listing? This action cannot be undone.")) {
+    if (
+      !window.confirm(
+        "Delete this listing? This action cannot be undone.",
+      )
+    ) {
       return;
     }
 
     setDeleting(true);
-    const response = await fetch(`/api/listings/${id}`, { method: "DELETE" });
+    const response = await fetch(`/api/listings/${id}`, {
+      method: "DELETE",
+    });
     setDeleting(false);
 
     if (response.ok) {
@@ -57,16 +65,27 @@ export default function ListingView() {
     <div className="p-8 max-w-3xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">{item.address || "Untitled Listing"}</h1>
+          <h1 className="text-2xl font-semibold">
+            {item.address || "Untitled Listing"}
+          </h1>
           <p className="text-sm kw-muted mt-2">
-            {item.city || item.state ? [item.city, item.state].filter(Boolean).join(", ") : item.zip_code || "No location provided."}
+            {item.city || item.state
+              ? [item.city, item.state].filter(Boolean).join(", ")
+              : item.zip_code || "No location provided."}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => router.push(`/dashboard/listings/${id}/edit`)}>
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/dashboard/listings/${id}/edit`)}
+          >
             Edit
           </Button>
-          <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={deleting}
+          >
             {deleting ? "Deleting..." : "Delete"}
           </Button>
         </div>
@@ -88,38 +107,55 @@ export default function ListingView() {
           </div>
           <div>
             <h2 className="text-sm font-semibold">Beds</h2>
-            <p className="mt-1 text-sm text-muted">{item.beds ?? "—"}</p>
+            <p className="mt-1 text-sm text-muted">
+              {item.beds ?? "—"}
+            </p>
           </div>
           <div>
             <h2 className="text-sm font-semibold">Baths</h2>
-            <p className="mt-1 text-sm text-muted">{item.baths ?? "—"}</p>
+            <p className="mt-1 text-sm text-muted">
+              {item.baths ?? "—"}
+            </p>
           </div>
           <div>
             <h2 className="text-sm font-semibold">Square Feet</h2>
-            <p className="mt-1 text-sm text-muted">{item.square_feet ?? "—"}</p>
+            <p className="mt-1 text-sm text-muted">
+              {item.square_feet ?? "—"}
+            </p>
           </div>
           <div>
             <h2 className="text-sm font-semibold">Year Built</h2>
-            <p className="mt-1 text-sm text-muted">{item.year_built ?? "—"}</p>
+            <p className="mt-1 text-sm text-muted">
+              {item.year_built ?? "—"}
+            </p>
           </div>
         </div>
 
         <div>
           <h2 className="text-sm font-semibold">Seller Notes</h2>
-          <p className="mt-1 whitespace-pre-wrap text-sm text-muted">{item.seller_notes || "—"}</p>
+          <p className="mt-1 whitespace-pre-wrap text-sm text-muted">
+            {item.seller_notes || "—"}
+          </p>
         </div>
 
         <div className="grid gap-2 sm:grid-cols-2">
           <div>
             <h2 className="text-sm font-semibold">Created</h2>
-            <p className="mt-1 text-sm text-muted">{new Date(item.created_at).toLocaleString()}</p>
+            <p className="mt-1 text-sm text-muted">
+              {new Date(item.created_at).toLocaleString()}
+            </p>
           </div>
           <div>
             <h2 className="text-sm font-semibold">Last updated</h2>
-            <p className="mt-1 text-sm text-muted">{new Date(item.updated_at).toLocaleString()}</p>
+            <p className="mt-1 text-sm text-muted">
+              {new Date(item.updated_at).toLocaleString()}
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Listing description generator panel */}
+      <ListingDescriptionPanel listingId={id} />
     </div>
   );
 }
