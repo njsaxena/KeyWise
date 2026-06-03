@@ -140,7 +140,9 @@ export default function AssistantPage() {
       });
 
       if (!res.ok) {
-        console.error("Assistant API error:", await res.text());
+        const text = await res.text();
+        console.error("Assistant API error:", text);
+         // Optionally parse and surface to UI later
         setIsSending(false);
         return;
       }
