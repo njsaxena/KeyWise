@@ -27,7 +27,7 @@ export function ListingDescriptionPanel({ listingId }: { listingId: string }) {
       try {
         setLoading(true);
         const res = await fetch(
-          `/api/listings/${listingId}/generated-description?type=listing_description`,
+          `/api/listings/${listingId}/generated-content?type=listing_description`,
         );
         if (!res.ok) return;
         const data: { content: GeneratedContent | null } = await res.json();
@@ -54,9 +54,11 @@ export function ListingDescriptionPanel({ listingId }: { listingId: string }) {
     setSaved(false);
     try {
       const res = await fetch(
-        `/api/listings/${listingId}/generated-description`,
+        `/api/listings/${listingId}/generated-content`,
         {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content_type: "listing_description" }),
         },
       );
       if (!res.ok) {
@@ -79,7 +81,7 @@ export function ListingDescriptionPanel({ listingId }: { listingId: string }) {
     setSaved(false);
     try {
       const res = await fetch(
-        `/api/listings/${listingId}/generated-description/${content.id}`,
+        `/api/listings/${listingId}/generated-content/${content.id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

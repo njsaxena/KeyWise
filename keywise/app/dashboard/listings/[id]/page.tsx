@@ -6,6 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Listing } from "@/types/listing";
 import { ListingDescriptionPanel } from "@/components/listing-description-panel";
+import { ContentGenerator } from "@/components/dashboard/content-generator";
 
 export default function ListingView() {
   const params = useParams<{ id: string }>();
@@ -154,8 +155,9 @@ export default function ListingView() {
         </div>
       </div>
 
-      {/* Listing description generator panel */}
-      <ListingDescriptionPanel listingId={id} />
+      {/* AI content generator (listing description, social post, open house) */}
+      <ContentGenerator listingId={id} />
+
     </div>
   );
 }
