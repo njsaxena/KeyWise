@@ -156,10 +156,6 @@ export function ContentGenerator({ listingId }: { listingId: string }) {
               }}
             >
               {label}
-              {/* Green dot if content exists and is saved */}
-              {contentMap[key]?.is_published && (
-                <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-white" />
-              )}
             </button>
           );
         })}

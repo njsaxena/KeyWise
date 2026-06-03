@@ -1,3 +1,4 @@
+// app/api/listings/[id]/generated-content/[contentId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { createServerSupabaseClient } from "@/lib/supabase";
@@ -9,46 +10,43 @@ type ParamsArg =
 export async function PATCH(req: NextRequest, args: ParamsArg) {
   try {
     const resolvedParams = await ("params" in args ? args.params : args);
-    const { id: listingId, contentId } = resolvedParams;
+    const listingId = resolvedParams.id;
+    const contentId = resolvedParams.contentId;
 
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
-    const body = (await req.json()) as {
-      body?: string;
-      is_published?: boolean;
-    };
-
-    if (!body.body || !body.body.trim()) {
-      return NextResponse.json(
-        { error: "body is required" },
-        { status: 400 },
-      );
-    }
+    const { body, is_published } = await req.json();
 
     const supabase = createServerSupabaseClient();
 
     const { data, error } = await supabase
       .from("generated_content")
       .update({
-        body: body.body.trim(),
-        is_published: body.is_published ?? false,
-        updated_at: new Date().toISOString(),
+        body,
+        is_published,
       })
       .eq("id", contentId)
       .eq("listing_id", listingId)
       .eq("user_id", userId)
-      .eq("content_type", "listing_description")
       .select("id, body, is_published, created_at, updated_at")
-      .single();
+      .maybeSingle(); // <- key change
 
-    if (error || !data) {
+    if (error) {
       console.error(
         "PATCH /api/listings/[id]/generated-content/[contentId] supabase error:",
         error,
       );
+      return NextResponse.json(
+        { error: "Failed to update generated content" },
+        { status: 500 },
+      );
+    }
+
+    if (!data) {
+      // No row matched the filters
       return NextResponse.json(
         { error: "Generated content not found" },
         { status: 404 },
