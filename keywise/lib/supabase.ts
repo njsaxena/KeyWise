@@ -1,11 +1,21 @@
+// lib/supabase.ts
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+// TEMP: log once at module load
+if (typeof supabaseUrl !== "undefined") {
+  console.log("[Supabase] using URL:", supabaseUrl);
+} else {
+  console.log("[Supabase] NEXT_PUBLIC_SUPABASE_URL is undefined");
+}
+
 // Lazy initialization to prevent build-time errors
 let supabaseInstance: SupabaseClient | null = null;
+
+// ...rest of file unchanged...
 
 export function getSupabase(): SupabaseClient {
   if (!supabaseUrl || !supabaseAnonKey) {

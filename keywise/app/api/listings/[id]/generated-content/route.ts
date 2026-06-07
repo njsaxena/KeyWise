@@ -13,6 +13,7 @@ const VALID_TYPES = [
   "listing_description",
   "social_post",
   "open_house_blurb",
+  "staging_guidance",
 ] as const;
 
 type ContentType = (typeof VALID_TYPES)[number];
@@ -153,7 +154,23 @@ Seller Notes:
 "${listing.seller_notes ?? "None provided"}"
     `.trim();
 
-    const prompts: Record<ContentType, string> = {
+    // Only these types are generated via this endpoint.
+    type TextGeneratedType =
+      | "listing_description"
+      | "social_post"
+      | "open_house_blurb";
+
+    if (content_type === "staging_guidance") {
+      return NextResponse.json(
+        {
+          error:
+            "staging_guidance is generated via /generate-staging, not this route",
+        },
+        { status: 400 },
+      );
+    }
+
+    const prompts: Record<TextGeneratedType, string> = {
       listing_description: `
 You are a professional real estate marketing copywriter.
 
@@ -202,7 +219,7 @@ Requirements:
       `.trim(),
     };
 
-    const userPrompt = prompts[content_type];
+    const userPrompt = prompts[content_type as TextGeneratedType];
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -226,7 +243,7 @@ Requirements:
       .insert({
         listing_id: listingId,
         user_id: userId,
-        content_type, // <- use the requested type
+        content_type, // use the requested type
         body: drafted,
         is_published: false,
         model_used: "gpt-4o-mini",
